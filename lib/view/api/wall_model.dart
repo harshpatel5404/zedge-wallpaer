@@ -32,7 +32,6 @@ class ImageResponse {
         this.user,
     });
 
-<<<<<<< HEAD
     final String ? id;
     final DateTime ? createdAt;
     final DateTime ? updatedAt;
@@ -53,32 +52,6 @@ class ImageResponse {
     final User ? user;
 
     factory ImageResponse.fromJson(Map<String, dynamic> json) => ImageResponse(
-=======
-    final String? id;
-    final DateTime? createdAt;
-    final DateTime? updatedAt;
-    final DateTime? promotedAt;
-    final int? width;
-    final int? height;
-    final String? color;
-    final String? blurHash;
-    final dynamic description;
-    final String? altDescription;
-    final Urls? urls;
-    final GetImageLinks? links;
-    final List<dynamic>? categories;
-    final int? likes;
-    final bool? likedByUser;
-    final List<dynamic>? currentUserCollections;
-    final Sponsorship? sponsorship;
-    final User? user;
-
-    factory GetImage.fromJson(String str) => GetImage.fromMap(json.decode(str));
-
-    String toJson() => json.encode(toMap());
-
-    factory GetImage.fromMap(Map<String, dynamic> json) => GetImage(
->>>>>>> 3b8eb248b758aad1e02b111d48c1981b1dc3e701
         id: json["id"],
         createdAt: DateTime.parse(json["created_at"]),
         updatedAt: DateTime.parse(json["updated_at"]),
