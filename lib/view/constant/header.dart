@@ -66,7 +66,7 @@ class _HeaderState extends State<Header> {
                           if (isSearch == false) {
                             isSearch = true;
                           } else {
-                            Navigator.pushNamed(context, '/notifications');
+                            // Navigator.pushNamed(context, '/notifications');
                             isSearch = false;
                           }
                           // isSearch = !isSearch;
