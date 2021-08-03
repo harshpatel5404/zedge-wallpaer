@@ -7,11 +7,14 @@ import 'package:flutter/material.dart';
 import 'package:image_gallery_saver/image_gallery_saver.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:share/share.dart';
+import 'package:wallpaper/wallpaper.dart';
 import 'package:zedge/view/api/wall_model.dart';
 
 class Craousal extends StatefulWidget {
-   List<ImageResponse> ?data;
- Craousal({Key? key, this.data}) : super(key: key);
+  List<ImageResponse>? data;
+  List? links;
+  int? imgindex;
+  Craousal({Key? key, this.data, this.links, this.imgindex}) : super(key: key);
 
   @override
   State<StatefulWidget> createState() {
@@ -20,6 +23,22 @@ class Craousal extends StatefulWidget {
 }
 
 class _CraousalState extends State<Craousal> {
+  String? bgimag;
+
+  @override
+  void initState() {
+    WidgetsBinding.instance!.addPostFrameCallback((_) {
+      widget.links!.forEach((imageUrl) {
+        precacheImage(NetworkImage(imageUrl), context);
+      });
+    });
+    super.initState();
+  }
+
+  String home = "Home Screen",
+      lock = "Lock Screen",
+      both = "Both Screen",
+      system = "System";
   final List<String> images = [
     "https://source.unsplash.com/900x1600/?nature,water",
     "https://source.unsplash.com/900x1600/?waterfall",
@@ -27,21 +46,15 @@ class _CraousalState extends State<Craousal> {
     "https://source.unsplash.com/900x1600/?cartoon",
     "https://source.unsplash.com/900x1600/?water",
   ];
-  String? bgimag;
-  
-
-  @override
-  void initState() {
-    WidgetsBinding.instance!.addPostFrameCallback((_) {
-      images.forEach((imageUrl) {
-        precacheImage(NetworkImage(imageUrl), context);
-      });
-    });
-    super.initState();
-  }
+  Stream<String>? progressString;
+  String? res;
+  bool downloading = false;
 
   @override
   Widget build(BuildContext context) {
+    print("widget urls ${widget.links}");
+    print("widget data ${widget.data}");
+
     Future<String> createFolder(String wallpaper) async {
       final folderName = wallpaper;
       final path = Directory("storage/emulated/0/$folderName");
@@ -57,12 +70,11 @@ class _CraousalState extends State<Craousal> {
       }
     }
 
-
     _saveVideo() async {
       await Permission.storage.request();
-     var savePath = await createFolder("wallpaper");
+      var savePath = await createFolder("wallpaper");
       savePath = savePath + "/temp1.jpeg";
-      print("save $savePath");
+      // print("save $savePath");
 
       await Dio().download(
           "https://www.codegrepper.com/codeimages/how-to-push-data-to-array-in-dart.png",
@@ -71,125 +83,162 @@ class _CraousalState extends State<Craousal> {
       print(result);
     }
 
-    return Scaffold(
-      backgroundColor: Colors.black,
-      body: Padding(
-        padding: const EdgeInsets.only(top: 30),
-        child: Container(
-          decoration: new BoxDecoration(
-            gradient: LinearGradient(
-                colors: [Colors.grey, Colors.blueGrey],
-                begin: const FractionalOffset(0.0, 0.0),
-                end: const FractionalOffset(0.5, 0.0),
-                stops: [0.0, 1.0],
-                tileMode: TileMode.clamp),
-            image: new DecorationImage(
-              fit: BoxFit.cover,
-              colorFilter: new ColorFilter.mode(
-                  Colors.black.withOpacity(0.2), BlendMode.dstATop),
-              image: new NetworkImage(
-                "$bgimag",
+    var sliderindex = widget.imgindex!;
+    return widget.data == null
+        ? Center(child: CircularProgressIndicator())
+        : Scaffold(
+            backgroundColor: Colors.black,
+            body: Padding(
+              padding: const EdgeInsets.only(top: 30),
+              child: Container(
+                decoration: new BoxDecoration(
+                  gradient: LinearGradient(
+                      colors: [Colors.blueAccent, Colors.blue],
+                      begin: const FractionalOffset(0.0, 0.0),
+                      end: const FractionalOffset(0.5, 0.0),
+                      stops: [0.0, 1.0],
+                      tileMode: TileMode.clamp),
+                  image: new DecorationImage(
+                    fit: BoxFit.cover,
+                    colorFilter: new ColorFilter.mode(
+                        Colors.black.withOpacity(0.5), BlendMode.dstATop),
+                    image: new NetworkImage(
+                      "$bgimag",
+                    ),
+                  ),
+                ),
+                child: Column(
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.all(10.0),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          IconButton(
+                            onPressed: () {
+                              Navigator.pop(context);
+                            },
+                            icon: Icon(
+                              Icons.arrow_back_outlined,
+                              size: 35,
+                              color: Colors.white,
+                            ),
+                          ),
+                          InkWell(
+                            onTap: () async {
+                              print("share");
+                              try {
+                                progressString =
+                                    Wallpaper.ImageDownloadProgress(
+                                        widget.links![sliderindex]);
+                                progressString!.listen((data) {
+                                  setState(() {
+                                    res = data;
+                                    downloading = true;
+                                  });
+                                }, onDone: () async {
+                                  both = await Wallpaper.bothScreen();
+                                  setState(() {
+                                    downloading = false;
+                                    both = both;
+                                    lock = both;
+                                  });
+                                  print("Task Done");
+                                }, onError: (error) {
+                                  setState(() {
+                                    downloading = false;
+                                  });
+                                  print("Some Error");
+                                });
+                              } catch (e) {
+                                print("error is $e");
+                              }
+                            },
+                            child: Icon(
+                              Icons.more_vert,
+                              size: 35,
+                              color: Colors.white,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    CarouselSlider.builder(
+                      itemCount: widget.links!.length,
+                      options: CarouselOptions(
+                        height: MediaQuery.of(context).size.height * 0.70,
+                        viewportFraction: 0.65,
+                        initialPage: sliderindex - 1,
+                        aspectRatio: 2.0,
+                        enlargeCenterPage: true,
+                        onPageChanged: (index, reason) {
+                          setState(() {
+                            bgimag = widget.links![sliderindex];
+                            sliderindex++;
+                          });
+                        },
+                      ),
+                      itemBuilder: (context, index, realIdx) {
+                        return Container(
+                          child: Center(
+                              child: Image.network(
+                            widget.links![sliderindex],
+                            height: MediaQuery.of(context).size.height * 0.70,
+                            fit: BoxFit.cover,
+                          )),
+                        );
+                      },
+                    ),
+                    Container(
+                      height: MediaQuery.of(context).size.height * 0.13,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          SizedBox(
+                            width: 5,
+                          ),
+                          InkWell(
+                            onTap: () async {
+                              print("share");
+                              //  await ImageShare.shareImage(filePath: "https://www.codegrepper.com/codeimages/how-to-push-data-to-array-in-dart.png");
+                              var save = await createFolder("wallpaper");
+                              save = save + "/temp1.jpeg";
+                              await Share.shareFiles(['$save'],
+                                  text: 'Wallpaper');
+                            },
+                            child: Icon(
+                              Icons.share,
+                              size: 30,
+                              color: Colors.white,
+                            ),
+                          ),
+                          InkWell(
+                            onTap: () {
+                              setState(() {
+                                _saveVideo();
+                              });
+                            },
+                            child: Icon(
+                              Icons.download_for_offline_rounded,
+                              size: 70,
+                              color: Colors.white,
+                            ),
+                          ),
+                          Icon(
+                            Icons.favorite_border_outlined,
+                            size: 30,
+                            color: Colors.white,
+                          ),
+                          SizedBox(
+                            width: 5,
+                          )
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
               ),
             ),
-          ),
-          child: Column(
-            children: [
-              Padding(
-                padding: const EdgeInsets.all(10.0),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    IconButton(
-                      onPressed: () {
-                        Navigator.pop(context);
-                      },
-                      icon: Icon(
-                        Icons.arrow_back_outlined,
-                        size: 35,
-                        color: Colors.white,
-                      ),
-                    ),
-                    Icon(
-                      Icons.more_vert,
-                      size: 35,
-                      color: Colors.white,
-                    ),
-                  ],
-                ),
-              ),
-              CarouselSlider.builder(
-                itemCount: images.length,
-                options: CarouselOptions(
-                  height: MediaQuery.of(context).size.height * 0.70,
-                  viewportFraction: 0.65,
-                  aspectRatio: 2.0,
-                  enlargeCenterPage: true,
-                  onPageChanged: (index, reason) {
-                    setState(() {
-                      bgimag = images[index];
-                    });
-                  },
-                ),
-                itemBuilder: (context, index, realIdx) {
-                  return Container(
-                    child: Center(
-                        child: Image.network(
-                      images[index],
-                      fit: BoxFit.cover,
-                    )),
-                  );
-                },
-              ),
-              Container(
-                height: MediaQuery.of(context).size.height * 0.13,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    SizedBox(
-                      width: 5,
-                    ),
-                    InkWell(
-                      onTap: () async {
-                        print("share");
-                        //  await ImageShare.shareImage(filePath: "https://www.codegrepper.com/codeimages/how-to-push-data-to-array-in-dart.png");
-                        var save = await createFolder("wallpaper");
-                        save = save+"/temp1.jpeg";
-                        await Share.shareFiles(['$save'],
-                            text: 'Wallpaper');
-                      },
-                      child: Icon(
-                        Icons.share,
-                        size: 30,
-                        color: Colors.white,
-                      ),
-                    ),
-                    InkWell(
-                      onTap: () {
-                        setState(() {
-                          _saveVideo();
-                        });
-                      },
-                      child: Icon(
-                        Icons.download_for_offline_rounded,
-                        size: 70,
-                        color: Colors.white,
-                      ),
-                    ),
-                    Icon(
-                      Icons.favorite_border_outlined,
-                      size: 30,
-                      color: Colors.white,
-                    ),
-                    SizedBox(
-                      width: 5,
-                    )
-                  ],
-                ),
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
+          );
   }
 }

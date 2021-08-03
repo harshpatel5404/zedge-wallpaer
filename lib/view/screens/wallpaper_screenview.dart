@@ -15,7 +15,6 @@ class WallpaperTabView extends StatefulWidget {
 }
 
 class _WallpaperTabViewState extends State<WallpaperTabView> {
- 
   @override
   Widget build(BuildContext context) {
     return FutureBuilder<List<ImageResponse>>(
@@ -30,12 +29,12 @@ class _WallpaperTabViewState extends State<WallpaperTabView> {
             snapshot.connectionState == ConnectionState.done) {
           var data = snapshot.data!;
           List urls = [];
-          
+
           for (var i = 0; i < data.length; i++) {
             var img = data[i].urls!.small;
             urls.add(img);
           }
-
+          print(urls);
           return TabBarView(
             children: [
               CustomScrollView(
@@ -46,7 +45,9 @@ class _WallpaperTabViewState extends State<WallpaperTabView> {
                     title: "Featured",
                   )),
                   SliverToBoxAdapter(
-                    child: FeatureList(data: data,),
+                    child: FeatureList(
+                      data: data,
+                    ),
                   ),
                   SliverToBoxAdapter(
                     child: HeadingWidget(
@@ -55,6 +56,7 @@ class _WallpaperTabViewState extends State<WallpaperTabView> {
                   ),
                   PopularGridview(
                     data: data,
+                    links: urls,
                     isVideo: false,
                   )
                 ],
@@ -72,6 +74,7 @@ class _WallpaperTabViewState extends State<WallpaperTabView> {
               CustomScrollView(
                 slivers: [
                   PopularGridview(
+                    links: urls,
                     data: data,
                     isVideo: true,
                   )
