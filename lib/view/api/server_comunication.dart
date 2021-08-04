@@ -10,9 +10,7 @@ Future <List<ImageResponse>> getResponse () async{
   try {
     var response = await http.get(Uri.parse(url));
     if(response.statusCode == 200){
-      // print("response ${response.body}");
       final List<ImageResponse> imgUrl = imageResponseFromJson(response.body);
-      // print("imgUrl $imgUrl");
       return imgUrl;
     }
     else{

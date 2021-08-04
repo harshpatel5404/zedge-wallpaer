@@ -54,10 +54,12 @@ class _CraousalState extends State<Craousal> {
   Widget build(BuildContext context) {
     print("widget urls ${widget.links}");
     print("widget data ${widget.data}");
+    var sliderindex = widget.imgindex!;
 
     Future<String> createFolder(String wallpaper) async {
       final folderName = wallpaper;
-      final path = Directory("storage/emulated/0/$folderName");
+       final path = Directory("/storage/emulated/0/$folderName");
+       print("manual path = ${path.path}");
       var status = await Permission.storage.status;
       if (!status.isGranted) {
         await Permission.storage.request();
@@ -70,20 +72,19 @@ class _CraousalState extends State<Craousal> {
       }
     }
 
-    _saveVideo() async {
+   
+    _saveImage() async {
       await Permission.storage.request();
       var savePath = await createFolder("wallpaper");
-      savePath = savePath + "/temp1.jpeg";
-      // print("save $savePath");
-
+      savePath = savePath + "/zedge$sliderindex.jpeg";
+      print("savePath $savePath");
       await Dio().download(
-          "https://www.codegrepper.com/codeimages/how-to-push-data-to-array-in-dart.png",
+          widget.links![sliderindex],
           savePath);
       final result = await ImageGallerySaver.saveFile(savePath);
-      print(result);
+      print("result $result");
     }
 
-    var sliderindex = widget.imgindex!;
     return widget.data == null
         ? Center(child: CircularProgressIndicator())
         : Scaffold(
@@ -126,7 +127,6 @@ class _CraousalState extends State<Craousal> {
                           ),
                           InkWell(
                             onTap: () async {
-                              print("share");
                               try {
                                 progressString =
                                     Wallpaper.ImageDownloadProgress(
@@ -174,7 +174,6 @@ class _CraousalState extends State<Craousal> {
                         onPageChanged: (index, reason) {
                           setState(() {
                             bgimag = widget.links![sliderindex];
-                            sliderindex++;
                           });
                         },
                       ),
@@ -200,11 +199,11 @@ class _CraousalState extends State<Craousal> {
                           InkWell(
                             onTap: () async {
                               print("share");
-                              //  await ImageShare.shareImage(filePath: "https://www.codegrepper.com/codeimages/how-to-push-data-to-array-in-dart.png");
-                              var save = await createFolder("wallpaper");
-                              save = save + "/temp1.jpeg";
-                              await Share.shareFiles(['$save'],
-                                  text: 'Wallpaper');
+                              await _saveImage();
+                              
+                              var save = "storage/emulated/0/wallpaper/zedge$sliderindex.jpeg";
+                              print("save =  $save");
+                              await Share.shareFiles(['$save'], text: 'Wallpaper');
                             },
                             child: Icon(
                               Icons.share,
@@ -215,7 +214,7 @@ class _CraousalState extends State<Craousal> {
                           InkWell(
                             onTap: () {
                               setState(() {
-                                _saveVideo();
+                                _saveImage();
                               });
                             },
                             child: Icon(

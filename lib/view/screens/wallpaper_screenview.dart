@@ -34,7 +34,7 @@ class _WallpaperTabViewState extends State<WallpaperTabView> {
             var img = data[i].urls!.small;
             urls.add(img);
           }
-          print(urls);
+          // print(urls);
           return TabBarView(
             children: [
               CustomScrollView(
