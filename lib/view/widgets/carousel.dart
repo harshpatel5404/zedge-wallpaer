@@ -52,14 +52,14 @@ class _CraousalState extends State<Craousal> {
 
   @override
   Widget build(BuildContext context) {
-    print("widget urls ${widget.links}");
-    print("widget data ${widget.data}");
-    var sliderindex = widget.imgindex!;
+    // print("widget urls ${widget.links}");
+    // print("widget data ${widget.data}");
+    var sliderindex = widget.imgindex! -1;
 
     Future<String> createFolder(String wallpaper) async {
       final folderName = wallpaper;
        final path = Directory("/storage/emulated/0/$folderName");
-       print("manual path = ${path.path}");
+      //  print("manual path = ${path.path}");
       var status = await Permission.storage.status;
       if (!status.isGranted) {
         await Permission.storage.request();
@@ -71,18 +71,17 @@ class _CraousalState extends State<Craousal> {
         return path.path;
       }
     }
-
    
     _saveImage() async {
       await Permission.storage.request();
       var savePath = await createFolder("wallpaper");
       savePath = savePath + "/zedge$sliderindex.jpeg";
-      print("savePath $savePath");
+      // print("savePath $savePath");
       await Dio().download(
           widget.links![sliderindex],
           savePath);
       final result = await ImageGallerySaver.saveFile(savePath);
-      print("result $result");
+      // print("result $result");
     }
 
     return widget.data == null
@@ -143,7 +142,7 @@ class _CraousalState extends State<Craousal> {
                                     both = both;
                                     lock = both;
                                   });
-                                  print("Task Done");
+                                  // print("Task Done");
                                 }, onError: (error) {
                                   setState(() {
                                     downloading = false;
@@ -167,21 +166,27 @@ class _CraousalState extends State<Craousal> {
                       itemCount: widget.links!.length,
                       options: CarouselOptions(
                         height: MediaQuery.of(context).size.height * 0.70,
-                        viewportFraction: 0.65,
-                        initialPage: sliderindex - 1,
                         aspectRatio: 2.0,
                         enlargeCenterPage: true,
-                        onPageChanged: (index, reason) {
-                          setState(() {
-                            bgimag = widget.links![sliderindex];
-                          });
-                        },
+                        
                       ),
                       itemBuilder: (context, index, realIdx) {
+                       print("slider index $sliderindex");
+
+                        if(sliderindex <= 29 && sliderindex >= 0  ){
+                           sliderindex++;
+                         if (sliderindex == 29) {
+                          sliderindex = 1;
+                           
+                         }
+                        }
+
+                       
+
                         return Container(
                           child: Center(
                               child: Image.network(
-                            widget.links![sliderindex],
+                            widget.links![sliderindex-1],
                             height: MediaQuery.of(context).size.height * 0.70,
                             fit: BoxFit.cover,
                           )),
@@ -198,11 +203,10 @@ class _CraousalState extends State<Craousal> {
                           ),
                           InkWell(
                             onTap: () async {
-                              print("share");
+                              // print("share");
                               await _saveImage();
-                              
                               var save = "storage/emulated/0/wallpaper/zedge$sliderindex.jpeg";
-                              print("save =  $save");
+                              // print("save =  $save");
                               await Share.shareFiles(['$save'], text: 'Wallpaper');
                             },
                             child: Icon(
