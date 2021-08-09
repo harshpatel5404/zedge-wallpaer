@@ -14,7 +14,7 @@ class NotificationTabView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return FutureBuilder<List<ImageResponse>>(
-      future: getResponse(),
+      future: getResponse("wallpaper"),
       builder:
           (BuildContext context, AsyncSnapshot<List<ImageResponse>> snapshot) {
         if (snapshot.data == null ||

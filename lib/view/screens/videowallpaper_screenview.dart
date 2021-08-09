@@ -13,7 +13,7 @@ class VideoWallpaperTabView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return FutureBuilder<List<ImageResponse>>(
-      future: getResponse(),
+      future: getResponse("nature"),
       builder:
           (BuildContext context, AsyncSnapshot<List<ImageResponse>> snapshot) {
        if (snapshot.data == null ||

@@ -48,8 +48,8 @@ class _CategoriesgridState extends State<Categoriesgrid> {
             decoration: BoxDecoration(
                 image: DecorationImage(
                     image: NetworkImage(
-                    //  "https://source.unsplash.com/1600x900/?${name[index]}"
-                     "https://source.unsplash.com/1600x900/?nature"
+                     "https://source.unsplash.com/1600x900/?${name[index]}"
+                    //  "https://source.unsplash.com/1600x900/?nature"
                     ),
                     colorFilter: new ColorFilter.mode(Colors.black.withOpacity(0.7), BlendMode.dstATop),
                     fit: BoxFit.cover),

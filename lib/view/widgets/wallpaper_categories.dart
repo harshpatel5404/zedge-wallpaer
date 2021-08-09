@@ -34,14 +34,6 @@ class _WallpaperCategoriesState extends State<WallpaperCategories> {
           Padding(
             padding: const EdgeInsets.all(5.0),
             child: Text(
-              "Colors",
-              style: TextStyle(color: Colors.grey),
-            ),
-          ),
-          Lstcircle(),
-          Padding(
-            padding: const EdgeInsets.all(5.0),
-            child: Text(
               "Categories",
               style: TextStyle(color: Colors.grey),
             ),

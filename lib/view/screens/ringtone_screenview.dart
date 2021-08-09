@@ -3,7 +3,6 @@ import 'package:zedge/view/api/server_comunication.dart';
 import 'package:zedge/view/api/wall_model.dart';
 import 'package:zedge/view/screens/feature_list.dart';
 import 'package:zedge/view/widgets/categories_gridview.dart';
-import 'package:zedge/view/widgets/popular_view.dart';
 import 'package:zedge/view/widgets/title_widget.dart';
 import 'package:zedge/view/widgets/wallpaper_categories.dart';
 
@@ -15,7 +14,7 @@ class RingtoneTabView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return FutureBuilder<List<ImageResponse>>(
-      future: getResponse(),
+      future: getResponse("wallpaper"),
       builder:
           (BuildContext context, AsyncSnapshot<List<ImageResponse>> snapshot) {
         if (snapshot.data == null ||
