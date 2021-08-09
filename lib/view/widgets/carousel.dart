@@ -1,5 +1,4 @@
 import 'dart:io';
-
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:dio/dio.dart';
 import 'dart:ui';
@@ -24,7 +23,6 @@ class Craousal extends StatefulWidget {
 
 class _CraousalState extends State<Craousal> {
   String? bgimag;
-
   @override
   void initState() {
     WidgetsBinding.instance!.addPostFrameCallback((_) {
@@ -39,26 +37,23 @@ class _CraousalState extends State<Craousal> {
       lock = "Lock Screen",
       both = "Both Screen",
       system = "System";
-  final List<String> images = [
-    "https://source.unsplash.com/900x1600/?nature,water",
-    "https://source.unsplash.com/900x1600/?waterfall",
-    "https://source.unsplash.com/900x1600/?tree",
-    "https://source.unsplash.com/900x1600/?cartoon",
-    "https://source.unsplash.com/900x1600/?water",
-  ];
+
   Stream<String>? progressString;
   String? res;
   bool downloading = false;
-
+ 
   @override
   Widget build(BuildContext context) {
-    // print("widget urls ${widget.links}");
-    // print("widget data ${widget.data}");
-    var sliderindex = widget.imgindex! -1;
+
+  List indextoLast = widget.links!.getRange(widget.imgindex! , widget.links!.length).toList();
+  List firsttoIndex = widget.links!.getRange(0 ,widget.imgindex! ).toList();
+  indextoLast.addAll(firsttoIndex);
+
+    var changedIndex;
 
     Future<String> createFolder(String wallpaper) async {
       final folderName = wallpaper;
-       final path = Directory("/storage/emulated/0/$folderName");
+      final path = Directory("/storage/emulated/0/$folderName");
       //  print("manual path = ${path.path}");
       var status = await Permission.storage.status;
       if (!status.isGranted) {
@@ -71,15 +66,14 @@ class _CraousalState extends State<Craousal> {
         return path.path;
       }
     }
-   
-    _saveImage() async {
+
+    _saveImage(int saveindex) async {
+      print("save index =  $saveindex");
       await Permission.storage.request();
       var savePath = await createFolder("wallpaper");
-      savePath = savePath + "/zedge$sliderindex.jpeg";
+      savePath = savePath + "/zedge$saveindex.jpeg";
       // print("savePath $savePath");
-      await Dio().download(
-          widget.links![sliderindex],
-          savePath);
+      await Dio().download(indextoLast[saveindex], savePath);
       final result = await ImageGallerySaver.saveFile(savePath);
       // print("result $result");
     }
@@ -93,7 +87,7 @@ class _CraousalState extends State<Craousal> {
               child: Container(
                 decoration: new BoxDecoration(
                   gradient: LinearGradient(
-                      colors: [Colors.blueAccent, Colors.blue],
+                      colors: [Colors.grey, Colors.grey],
                       begin: const FractionalOffset(0.0, 0.0),
                       end: const FractionalOffset(0.5, 0.0),
                       stops: [0.0, 1.0],
@@ -129,7 +123,7 @@ class _CraousalState extends State<Craousal> {
                               try {
                                 progressString =
                                     Wallpaper.ImageDownloadProgress(
-                                        widget.links![sliderindex]);
+                                        widget.links![changedIndex]);
                                 progressString!.listen((data) {
                                   setState(() {
                                     res = data;
@@ -162,37 +156,52 @@ class _CraousalState extends State<Craousal> {
                         ],
                       ),
                     ),
+                    // for (var i = 0; i < widget.links!.length; i++) ...[
+                    //   CarouselSlider(
+                    //     items: [
+                    //       //1st Image of Slider
+                    //       Container(
+                    //         child: Center(
+                    //             child: Image.network(
+                    //           widget.links![i],
+                    //           height: MediaQuery.of(context).size.height * 0.70,
+                    //           fit: BoxFit.cover,
+                    //         )),
+                    //       )
+                    //     ],
+                    //     options: CarouselOptions(
+                    //       height: MediaQuery.of(context).size.height * 0.7,
+                    //       aspectRatio: 2.0,
+                    //       enlargeCenterPage: true,
+                    //     ),
+                    //   ),
+                    // ],
                     CarouselSlider.builder(
-                      itemCount: widget.links!.length,
+
+                     
+                      itemCount: indextoLast.length,
                       options: CarouselOptions(
+
                         height: MediaQuery.of(context).size.height * 0.70,
                         aspectRatio: 2.0,
+                        onPageChanged: (val,reason){
+                              changedIndex = val;
+                              print("changedIndex $changedIndex");
+                        },
                         enlargeCenterPage: true,
-                        
                       ),
-                      itemBuilder: (context, index, realIdx) {
-                       print("slider index $sliderindex");
-
-                        if(sliderindex <= 29 && sliderindex >= 0  ){
-                           sliderindex++;
-                         if (sliderindex == 29) {
-                          sliderindex = 1;
-                           
-                         }
-                        }
-
-                       
-
+                      itemBuilder: (context, index, realIdx) {                        
                         return Container(
                           child: Center(
                               child: Image.network(
-                            widget.links![sliderindex-1],
+                            indextoLast[index],
                             height: MediaQuery.of(context).size.height * 0.70,
                             fit: BoxFit.cover,
                           )),
                         );
                       },
                     ),
+
                     Container(
                       height: MediaQuery.of(context).size.height * 0.13,
                       child: Row(
@@ -203,11 +212,11 @@ class _CraousalState extends State<Craousal> {
                           ),
                           InkWell(
                             onTap: () async {
-                              // print("share");
-                              await _saveImage();
-                              var save = "storage/emulated/0/wallpaper/zedge$sliderindex.jpeg";
-                              // print("save =  $save");
-                              await Share.shareFiles(['$save'], text: 'Wallpaper');
+                              await _saveImage(changedIndex);
+                              var save =
+                                  "storage/emulated/0/wallpaper/zedge$changedIndex.jpeg";
+                              await Share.shareFiles(['$save'],
+                                  text: 'Wallpaper App');
                             },
                             child: Icon(
                               Icons.share,
@@ -217,9 +226,7 @@ class _CraousalState extends State<Craousal> {
                           ),
                           InkWell(
                             onTap: () {
-                              setState(() {
-                                _saveImage();
-                              });
+                              _saveImage(changedIndex);
                             },
                             child: Icon(
                               Icons.download_for_offline_rounded,

@@ -21,13 +21,13 @@ class PopularGridview extends StatelessWidget {
           padding: EdgeInsets.symmetric(horizontal: 3),
           child: InkWell(
             onTap: () {
+              
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => Craousal(data: data , links: links,imgindex: index, ),
+                  builder: (context) => Craousal(data: data , links: links , imgindex: index, ),
                 ),
               );
-              print(index);
             },
             child: Stack(
               children: [
