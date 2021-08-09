@@ -57,22 +57,13 @@ class _RingscreenState extends State<Ringscreen> {
             download: download[index],
           );
 
-      }
-    ));
+      },
+      childCount: download.length
+      
+    ),
     
-    //  Container(
-    //   height: 100,
-    //   child: ListView.builder(
-    //     scrollDirection: Axis.vertical,
-    //     itemCount: title.length,
-    //     itemBuilder: (context, index) {
-    //       return Ringlistview(
-    //         title: title[index],
-    //         subtitle: subtitle[index],
-    //         download: download[index],
-    //       );
-    //     },
-    //   ),
-    // );
+    );
+     
+    
   }
 }

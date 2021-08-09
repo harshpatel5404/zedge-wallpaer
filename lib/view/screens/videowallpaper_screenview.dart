@@ -16,13 +16,19 @@ class VideoWallpaperTabView extends StatelessWidget {
       future: getResponse(),
       builder:
           (BuildContext context, AsyncSnapshot<List<ImageResponse>> snapshot) {
-        if (snapshot.data == null ||
+       if (snapshot.data == null ||
             snapshot.connectionState == ConnectionState.waiting) {
           return Center(child: CircularProgressIndicator());
         }
         if (snapshot.data != null ||
             snapshot.connectionState == ConnectionState.done) {
           var data = snapshot.data!;
+          List urls = [];
+
+          for (var i = 0; i < data.length; i++) {
+            var img = data[i].urls!.small;
+            urls.add(img);
+          }
           return TabBarView(
             children: [
               CustomScrollView(
@@ -45,6 +51,7 @@ class VideoWallpaperTabView extends StatelessWidget {
                   PopularGridview(
                     data: data,
                     isVideo: true,
+                    links:urls ,
                   )
                 ],
               ),
@@ -56,7 +63,6 @@ class VideoWallpaperTabView extends StatelessWidget {
                     ),
                   ),
                   Categoriesgrid(
-                    
                   ),
                 ],
               ),
@@ -65,6 +71,7 @@ class VideoWallpaperTabView extends StatelessWidget {
                   PopularGridview(
                     data: data,
                     isVideo: true,
+                    links: urls,
                   )
                 ],
               )

@@ -41,13 +41,13 @@ class _CraousalState extends State<Craousal> {
   Stream<String>? progressString;
   String? res;
   bool downloading = false;
- 
+
   @override
   Widget build(BuildContext context) {
-
-  List indextoLast = widget.links!.getRange(widget.imgindex! , widget.links!.length).toList();
-  List firsttoIndex = widget.links!.getRange(0 ,widget.imgindex! ).toList();
-  indextoLast.addAll(firsttoIndex);
+    List indextoLast =
+        widget.links!.getRange(widget.imgindex!, widget.links!.length).toList();
+    List firsttoIndex = widget.links!.getRange(0, widget.imgindex!).toList();
+    indextoLast.addAll(firsttoIndex);
 
     var changedIndex;
 
@@ -75,7 +75,7 @@ class _CraousalState extends State<Craousal> {
       // print("savePath $savePath");
       await Dio().download(indextoLast[saveindex], savePath);
       final result = await ImageGallerySaver.saveFile(savePath);
-      // print("result $result");
+     
     }
 
     return widget.data == null
@@ -123,7 +123,7 @@ class _CraousalState extends State<Craousal> {
                               try {
                                 progressString =
                                     Wallpaper.ImageDownloadProgress(
-                                        widget.links![changedIndex]);
+                                        indextoLast[changedIndex]);
                                 progressString!.listen((data) {
                                   setState(() {
                                     res = data;
@@ -143,6 +143,10 @@ class _CraousalState extends State<Craousal> {
                                   });
                                   print("Some Error");
                                 });
+                                 ScaffoldMessenger.of(context)
+                                  .showSnackBar(SnackBar(
+                                content: Text("Wallpaper set sucessfully"),
+                              ));
                               } catch (e) {
                                 print("error is $e");
                               }
@@ -156,41 +160,17 @@ class _CraousalState extends State<Craousal> {
                         ],
                       ),
                     ),
-                    // for (var i = 0; i < widget.links!.length; i++) ...[
-                    //   CarouselSlider(
-                    //     items: [
-                    //       //1st Image of Slider
-                    //       Container(
-                    //         child: Center(
-                    //             child: Image.network(
-                    //           widget.links![i],
-                    //           height: MediaQuery.of(context).size.height * 0.70,
-                    //           fit: BoxFit.cover,
-                    //         )),
-                    //       )
-                    //     ],
-                    //     options: CarouselOptions(
-                    //       height: MediaQuery.of(context).size.height * 0.7,
-                    //       aspectRatio: 2.0,
-                    //       enlargeCenterPage: true,
-                    //     ),
-                    //   ),
-                    // ],
                     CarouselSlider.builder(
-
-                     
                       itemCount: indextoLast.length,
                       options: CarouselOptions(
-
                         height: MediaQuery.of(context).size.height * 0.70,
                         aspectRatio: 2.0,
-                        onPageChanged: (val,reason){
-                              changedIndex = val;
-                              print("changedIndex $changedIndex");
+                        onPageChanged: (val, reason) {
+                          changedIndex = val;
                         },
                         enlargeCenterPage: true,
                       ),
-                      itemBuilder: (context, index, realIdx) {                        
+                      itemBuilder: (context, index, realIdx) {
                         return Container(
                           child: Center(
                               child: Image.network(
@@ -201,7 +181,6 @@ class _CraousalState extends State<Craousal> {
                         );
                       },
                     ),
-
                     Container(
                       height: MediaQuery.of(context).size.height * 0.13,
                       child: Row(
@@ -227,6 +206,10 @@ class _CraousalState extends State<Craousal> {
                           InkWell(
                             onTap: () {
                               _saveImage(changedIndex);
+                              ScaffoldMessenger.of(context)
+                                  .showSnackBar(SnackBar(
+                                content: Text("Downloded"),
+                              ));
                             },
                             child: Icon(
                               Icons.download_for_offline_rounded,

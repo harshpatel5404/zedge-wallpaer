@@ -25,10 +25,15 @@ class RingtoneTabView extends StatelessWidget {
         if (snapshot.data != null ||
             snapshot.connectionState == ConnectionState.done) {
           var data = snapshot.data!;
+          List urls = [];
+
+          for (var i = 0; i < data.length; i++) {
+            var img = data[i].urls!.small;
+            urls.add(img);
+          }
           return TabBarView(
             children: [
               CustomScrollView(
-                semanticChildCount: 1,
                 slivers: <Widget>[
                   SliverToBoxAdapter(
                       child: HeadingWidget(
