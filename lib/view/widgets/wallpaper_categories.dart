@@ -1,10 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:zedge/view/api/wall_model.dart';
-
 import 'categories_wallpaper_popular_list.dart';
-import 'categories_gridview.dart';
-import 'lstcircle.dart';
 
 
 
