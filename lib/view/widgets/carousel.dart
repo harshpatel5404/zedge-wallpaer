@@ -22,69 +22,76 @@ class Craousal extends StatefulWidget {
 }
 
 class _CraousalState extends State<Craousal> {
-  String? bgimag;
-  @override
-  void initState() {
-    try {
-   
-    WidgetsBinding.instance!.addPostFrameCallback((_) {
-      widget.links!.forEach((imageUrl) {
-        precacheImage(NetworkImage(imageUrl), context);
-      });
-    });
-    super.initState();
-       
-    } catch (e) {
-    }
-  }
+ 
+
 
   String home = "Home Screen",
       lock = "Lock Screen",
       both = "Both Screen",
       system = "System";
 
+       String? bgimag;
+
+
+
+
+
+  @override
+  void initState() {
+    try {
+      WidgetsBinding.instance!.addPostFrameCallback((_) {
+        widget.links!.forEach((imageUrl) {
+          precacheImage(NetworkImage(imageUrl), context);
+        });
+      });
+      bgimag = widget.links![widget.imgindex!];
+      super.initState();
+      
+    } catch (e) {}
+  }
+
+
   Stream<String>? progressString;
   String? res;
   bool downloading = false;
-
   @override
   Widget build(BuildContext context) {
+    
+    try {
+      List indextoLast = widget.links!
+          .getRange(widget.imgindex!, widget.links!.length)
+          .toList();
+      List firsttoIndex = widget.links!.getRange(0, widget.imgindex!).toList();
+      indextoLast.addAll(firsttoIndex);
 
-      try {
-    List indextoLast =
-        widget.links!.getRange(widget.imgindex!, widget.links!.length).toList();
-    List firsttoIndex = widget.links!.getRange(0, widget.imgindex!).toList();
-    indextoLast.addAll(firsttoIndex);
+      var changedIndex;
 
-    var changedIndex;
+      Future<String> createFolder(String wallpaper) async {
+        final folderName = wallpaper;
+        final path = Directory("/storage/emulated/0/$folderName");
+        //  print("manual path = ${path.path}");
+        var status = await Permission.storage.status;
+        if (!status.isGranted) {
+          await Permission.storage.request();
+        }
+        if ((await path.exists())) {
+          return path.path;
+        } else {
+          path.create();
+          return path.path;
+        }
+      }
 
-    Future<String> createFolder(String wallpaper) async {
-      final folderName = wallpaper;
-      final path = Directory("/storage/emulated/0/$folderName");
-      //  print("manual path = ${path.path}");
-      var status = await Permission.storage.status;
-      if (!status.isGranted) {
+      _saveImage(int saveindex) async {
+        print("save index =  $saveindex");
         await Permission.storage.request();
+        var savePath = await createFolder("wallpaper");
+        savePath = savePath + "/zedge$saveindex.jpeg";
+        // print("savePath $savePath");
+        await Dio().download(indextoLast[saveindex], savePath);
+        final result = await ImageGallerySaver.saveFile(savePath);
       }
-      if ((await path.exists())) {
-        return path.path;
-      } else {
-        path.create();
-        return path.path;
-      }
-    }
 
-    _saveImage(int saveindex) async {
-      print("save index =  $saveindex");
-      await Permission.storage.request();
-      var savePath = await createFolder("wallpaper");
-      savePath = savePath + "/zedge$saveindex.jpeg";
-      // print("savePath $savePath");
-      await Dio().download(indextoLast[saveindex], savePath);
-      final result = await ImageGallerySaver.saveFile(savePath);
-    }
-
-  
       return widget.data == null
           ? Center(child: CircularProgressIndicator())
           : Scaffold(
@@ -102,7 +109,7 @@ class _CraousalState extends State<Craousal> {
                     image: new DecorationImage(
                       fit: BoxFit.cover,
                       colorFilter: new ColorFilter.mode(
-                          Colors.black.withOpacity(0.5), BlendMode.dstATop),
+                          Colors.black.withOpacity(0.35), BlendMode.dstATop),
                       image: new NetworkImage(
                         "$bgimag",
                       ),
@@ -174,6 +181,9 @@ class _CraousalState extends State<Craousal> {
                           aspectRatio: 2.0,
                           onPageChanged: (val, reason) {
                             changedIndex = val;
+                            setState(() {
+                              bgimag = indextoLast[changedIndex];
+                            });
                           },
                           enlargeCenterPage: true,
                         ),
