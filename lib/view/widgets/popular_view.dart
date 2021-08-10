@@ -10,6 +10,10 @@ class PopularGridview extends StatelessWidget {
       : super(key: key);
   @override
   Widget build(BuildContext context) {
+    
+
+
+
     return SliverGrid(
       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
         crossAxisCount: 3,
@@ -17,7 +21,10 @@ class PopularGridview extends StatelessWidget {
         mainAxisSpacing: 6,
       ),
       delegate: SliverChildBuilderDelegate((BuildContext context, int index) {
-        return Padding(
+        return
+        
+        
+         Padding(
           padding: EdgeInsets.symmetric(horizontal: 3),
           child: InkWell(
             onTap: () {

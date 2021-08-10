@@ -38,7 +38,7 @@ class _HeaderState extends State<Header> {
         body: NestedScrollView(
             headerSliverBuilder:
                 (BuildContext context, bool innerBoxIsScrolled) {
-              return <Widget>[
+                  return <Widget>[
                 SliverAppBar(
                   backgroundColor: Color(0xff241f1f),
                   title: isSearch
@@ -94,29 +94,23 @@ class _HeaderState extends State<Header> {
                       unselectedLabelStyle: TextStyle(color: Colors.grey),
                       unselectedLabelColor: Colors.grey[300],
                       tabs: [
-                        Expanded(
-                          child: Text(
-                            "HOME",
-                            textAlign: TextAlign.center,
-                            style: TextStyle(
-                                fontSize: 15, fontWeight: FontWeight.bold),
-                          ),
+                        Text(
+                          "HOME",
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                              fontSize: 15, fontWeight: FontWeight.bold),
                         ),
-                        Expanded(
-                          child: Text(
-                            "CATAGORIES",
-                            textAlign: TextAlign.center,
-                            style: TextStyle(
-                                fontSize: 15, fontWeight: FontWeight.bold),
-                          ),
+                        Text(
+                          "CATAGORIES",
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                              fontSize: 15, fontWeight: FontWeight.bold),
                         ),
-                        Expanded(
-                          child: Text(
-                            "PREMIUM",
-                            textAlign: TextAlign.center,
-                            style: TextStyle(
-                                fontSize: 15, fontWeight: FontWeight.bold),
-                          ),
+                        Text(
+                          "PREMIUM",
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                              fontSize: 15, fontWeight: FontWeight.bold),
                         ),
                       ],
                     ),
