@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:zedge/view/api/wall_model.dart';
 import 'dart:ui';
 import 'package:zedge/view/screens/categories_popularsearch_page.dart';
 
@@ -16,7 +17,7 @@ List lst = [
 ];
 
 class WallpaperCategoriesPopularList extends StatelessWidget {
-  var data;
+  List<ImageResponse>? data;
     WallpaperCategoriesPopularList({
     Key? key,   this.data,
   }) : super(key: key);

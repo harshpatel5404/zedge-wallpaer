@@ -1,10 +1,11 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:zedge/view/api/wall_model.dart';
 import 'categories_wallpaper_popular_list.dart';
 
 class WallpaperCategories extends StatefulWidget {
-  var data;
-    WallpaperCategories({Key? key,   this.data}) : super(key: key);
+ List<ImageResponse>? data;
+ WallpaperCategories({Key? key,   this.data}) : super(key: key);
 
   @override
   _WallpaperCategoriesState createState() => _WallpaperCategoriesState();

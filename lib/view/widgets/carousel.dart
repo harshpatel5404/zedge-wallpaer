@@ -44,6 +44,7 @@ class _CraousalState extends State<Craousal> {
           precacheImage(NetworkImage(imageUrl), context);
         });
       });
+      
       bgimag = widget.links![widget.imgindex!];
       super.initState();
       

@@ -6,7 +6,7 @@ import 'package:zedge/view/api/wall_model.dart';
 
 
 class Childpage extends StatefulWidget {
-  var data;
+  List<ImageResponse>? data;
    Childpage({Key? key, this.data}) : super(key: key);
 
   @override
@@ -147,15 +147,15 @@ class _ChildpageState extends State<Childpage> {
             child: Container(
               child: GridView.count(
                 crossAxisCount: 3,
-                childAspectRatio: .6,
-                children: List.generate(15, (index) {
+                childAspectRatio: 0.55,
+                children: List.generate(widget.data!.length, (index) {
                   return Padding(
                     padding: const EdgeInsets.all(3.0),
                     child: Container(
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(8),
                           image: DecorationImage(
-                            image: NetworkImage(widget.data!),
+                            image: NetworkImage(widget.data![index].urls!.thumb.toString()),
                             fit: BoxFit.fill,
                           ),
                         )
