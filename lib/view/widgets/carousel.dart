@@ -23,8 +23,6 @@ class Craousal extends StatefulWidget {
 
 class _CraousalState extends State<Craousal> {
  
-
-
   String home = "Home Screen",
       lock = "Lock Screen",
       both = "Both Screen",
@@ -129,7 +127,7 @@ class _CraousalState extends State<Craousal> {
                               },
                               icon: Icon(
                                 Icons.arrow_back_outlined,
-                                size: 35,
+                                size: 30,
                                 color: Colors.white,
                               ),
                             ),
@@ -168,7 +166,7 @@ class _CraousalState extends State<Craousal> {
                               },
                               child: Icon(
                                 Icons.more_vert,
-                                size: 35,
+                                size: 30,
                                 color: Colors.white,
                               ),
                             ),
