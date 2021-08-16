@@ -21,7 +21,6 @@ class _FeatureListViewState extends State<FeatureListView> {
    void loaddata()  {
        setState(() {
          load = false;
-
        });
     }
 @override
@@ -30,7 +29,7 @@ void initState() {
   load = true;
       Future.delayed(
           Duration(
-            seconds: 2,
+            seconds: 3,
           ),loaddata);  
 }
   @override
@@ -54,6 +53,7 @@ void initState() {
           : Container(
               width: MediaQuery.of(context).size.width * 0.42,
               decoration: new BoxDecoration(
+                        color: Colors.grey,
                 borderRadius: BorderRadius.circular(10),
                 image: new DecorationImage(
                   image: NetworkImage(widget.image),

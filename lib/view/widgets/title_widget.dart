@@ -17,7 +17,7 @@ class _HeadingWidgetState extends State<HeadingWidget> {
    Future loaddata()  {
       return  Future.delayed(
           Duration(
-            seconds: 2,
+            seconds: 3,
           ), () {
         setState(() {
           load = false;

@@ -17,11 +17,17 @@ class PopularGridview extends StatefulWidget {
 
 class _PopularGridviewState extends State<PopularGridview> {
   @override
+  void initState() { 
+    super.initState();
+     load = true;
+  }
+  @override
   Widget build(BuildContext context) {
     Future loaddata()  {
+     
       return  Future.delayed(
           Duration(
-            seconds: 2,
+            seconds: 3,
           ), () {
         setState(() {
           load = false;
@@ -45,7 +51,7 @@ loaddata();
                     highlightColor: Colors.white,
                     child: Container(
                       decoration: BoxDecoration(
-                        color: Colors.white,
+                        color: Colors.grey,
                         borderRadius: BorderRadius.circular(10),
                       ),
                     ),
@@ -82,6 +88,7 @@ loaddata();
                     children: [
                       Container(
                         decoration: BoxDecoration(
+                          color: Colors.grey,
                           image: new DecorationImage(
                             image: NetworkImage(widget.links![index]),
                             fit: BoxFit.cover,

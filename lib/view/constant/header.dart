@@ -20,7 +20,7 @@ class _HeaderState extends State<Header> {
   Widget build(BuildContext context) {
     if (widget.title == "Wallpapers") {
       view = WallpaperTabView();
-    } 
+    }
     else if (widget.title == "Video Wallpapers") {
       view = VideoWallpaperTabView();
     } else if (widget.title == "Ringtones") {
