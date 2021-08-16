@@ -40,6 +40,7 @@ class RingtoneTabView extends StatelessWidget {
                   )),
                   SliverToBoxAdapter(
                     child: FeatureList(
+                      isloading: true,
                       data: data,
                     ),
                   ),

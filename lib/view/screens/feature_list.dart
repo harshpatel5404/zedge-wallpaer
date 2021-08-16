@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:zedge/view/api/wall_model.dart';
 import 'package:zedge/view/widgets/feature_view.dart';
-import 'package:zedge/view/widgets/popular_view.dart';
-
 import 'video_screen.dart';
 
 List feturedWallpaper = [
@@ -44,12 +42,20 @@ List feturedWallpaper = [
   {"icon": Icons.verified, "title": "summer time", "image": "assets/img1.jpg"},
 ];
 
-class FeatureList extends StatelessWidget {
+class FeatureList extends StatefulWidget {
   List<ImageResponse>? data;
-  FeatureList({Key? key, this.data}) : super(key: key);
+  bool isloading;
+  FeatureList({Key? key, this.data, required this.isloading}) : super(key: key);
+
+  @override
+  _FeatureListState createState() => _FeatureListState();
+}
+
+class _FeatureListState extends State<FeatureList> {
 
   @override
   Widget build(BuildContext context) {
+
     return Row(
       children: [
         Container(
@@ -57,7 +63,7 @@ class FeatureList extends StatelessWidget {
           width: MediaQuery.of(context).size.width,
           child: ListView.builder(
             scrollDirection: Axis.horizontal,
-            itemCount: data!.length,
+            itemCount: widget.data!.length,
             itemBuilder: (context, index) {
               return InkWell(
                 onTap: () {
@@ -65,9 +71,10 @@ class FeatureList extends StatelessWidget {
                       MaterialPageRoute(builder: (context) => VideoScreen()));
                 },
                 child: FeatureListView(
+                  isloading: widget.isloading,
                   title: feturedWallpaper[index]["title"],
                   icon: feturedWallpaper[index]["icon"],
-                  image: data![index].urls!.small,
+                  image: widget.data![index].urls!.small,
                 ),
               );
             },

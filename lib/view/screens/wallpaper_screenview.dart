@@ -14,7 +14,11 @@ class WallpaperTabView extends StatefulWidget {
   _WallpaperTabViewState createState() => _WallpaperTabViewState();
 }
 
+bool load = true;
+
 class _WallpaperTabViewState extends State<WallpaperTabView> {
+ 
+
   @override
   Widget build(BuildContext context) {
     return FutureBuilder<List<ImageResponse>>(
@@ -23,12 +27,59 @@ class _WallpaperTabViewState extends State<WallpaperTabView> {
           (BuildContext context, AsyncSnapshot<List<ImageResponse>> snapshot) {
         if (snapshot.data == null ||
             snapshot.connectionState == ConnectionState.waiting) {
-          return Center(child: CircularProgressIndicator());
+          load = true;
+          return TabBarView(
+            children: [
+              CustomScrollView(
+                semanticChildCount: 1,
+                slivers: <Widget>[
+                  SliverToBoxAdapter(
+                      child: HeadingWidget(
+                    title: "Featured",
+                  )),
+                  SliverToBoxAdapter(
+                    child: FeatureList(
+                      data: [],
+                      isloading: false,
+                    ),
+                  ),
+                  SliverToBoxAdapter(
+                    child: HeadingWidget(
+                      title: "Popular",
+                    ),
+                  ),
+                  PopularGridview(
+                    data: [],
+                    links: [],
+                    isVideo: false,
+                  )
+                ],
+              ),
+              CustomScrollView(
+                slivers: [
+                  SliverToBoxAdapter(
+                    child: WallpaperCategories(
+                      data: [],
+                    ),
+                  ),
+                  Categoriesgrid(),
+                ],
+              ),
+              CustomScrollView(
+                slivers: [
+                  PopularGridview(
+                    links: [],
+                    data: [],
+                    isVideo: true,
+                  )
+                ],
+              )
+            ],
+          );
         }
         if (snapshot.data != null ||
             snapshot.connectionState == ConnectionState.done) {
           var data = snapshot.data!;
-          
           List urls = [];
 
           for (var i = 0; i < data.length; i++) {
@@ -47,6 +98,7 @@ class _WallpaperTabViewState extends State<WallpaperTabView> {
                   SliverToBoxAdapter(
                     child: FeatureList(
                       data: data,
+                      isloading: false,
                     ),
                   ),
                   SliverToBoxAdapter(
@@ -58,7 +110,8 @@ class _WallpaperTabViewState extends State<WallpaperTabView> {
                     data: data,
                     links: urls,
                     isVideo: false,
-                  )
+                  ),
+                 
                 ],
               ),
               CustomScrollView(
@@ -83,7 +136,7 @@ class _WallpaperTabViewState extends State<WallpaperTabView> {
             ],
           );
         }
-        return Center(child: CircularProgressIndicator());
+        return CircularProgressIndicator();
       },
     );
   }

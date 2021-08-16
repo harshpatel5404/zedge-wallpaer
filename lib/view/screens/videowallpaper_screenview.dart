@@ -40,6 +40,7 @@ class VideoWallpaperTabView extends StatelessWidget {
                   )),
                   SliverToBoxAdapter(
                     child: FeatureList(
+                      isloading: true,
                       data: data,
                     ),
                   ),
