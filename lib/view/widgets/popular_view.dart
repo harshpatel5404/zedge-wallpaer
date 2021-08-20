@@ -16,26 +16,12 @@ class PopularGridview extends StatefulWidget {
 }
 
 class _PopularGridviewState extends State<PopularGridview> {
-  @override
-  void initState() { 
-    super.initState();
-     load = true;
-  }
+
+
   @override
   Widget build(BuildContext context) {
-    Future loaddata()  {
-     
-      return  Future.delayed(
-          Duration(
-            seconds: 3,
-          ), () {
-        setState(() {
-          load = false;
-        });
-      });
-    }
-loaddata();   
-    return load
+
+    return load!
         ? SliverGrid(
             gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
               crossAxisCount: 3,
@@ -122,7 +108,7 @@ loaddata();
                   ),
                 ),
               );
-            }, childCount: widget.data!.length  ),
+            }, childCount: widget.data!.length),
           );
   }
 }

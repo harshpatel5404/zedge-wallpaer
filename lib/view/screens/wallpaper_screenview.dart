@@ -13,11 +13,14 @@ class WallpaperTabView extends StatefulWidget {
   @override
   _WallpaperTabViewState createState() => _WallpaperTabViewState();
 }
-
-bool load = true;
-
+bool? load;
+List urls = [];
 class _WallpaperTabViewState extends State<WallpaperTabView> {
- 
+  @override
+  void initState() {
+    super.initState();
+    load = true;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -40,7 +43,6 @@ class _WallpaperTabViewState extends State<WallpaperTabView> {
                   SliverToBoxAdapter(
                     child: FeatureList(
                       data: [],
-                      isloading: false,
                     ),
                   ),
                   SliverToBoxAdapter(
@@ -80,8 +82,7 @@ class _WallpaperTabViewState extends State<WallpaperTabView> {
         if (snapshot.data != null ||
             snapshot.connectionState == ConnectionState.done) {
           var data = snapshot.data!;
-          List urls = [];
-
+          load = false;
           for (var i = 0; i < data.length; i++) {
             var img = data[i].urls!.small;
             urls.add(img);
@@ -98,7 +99,6 @@ class _WallpaperTabViewState extends State<WallpaperTabView> {
                   SliverToBoxAdapter(
                     child: FeatureList(
                       data: data,
-                      isloading: false,
                     ),
                   ),
                   SliverToBoxAdapter(
@@ -111,7 +111,6 @@ class _WallpaperTabViewState extends State<WallpaperTabView> {
                     links: urls,
                     isVideo: false,
                   ),
-                 
                 ],
               ),
               CustomScrollView(

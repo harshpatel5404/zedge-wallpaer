@@ -35,7 +35,6 @@ class NotificationTabView extends StatelessWidget {
                   )),
                   SliverToBoxAdapter(
                     child: FeatureList(
-                      isloading: true,
                       data: data,
                     ),
                   ),

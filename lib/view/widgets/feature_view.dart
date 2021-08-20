@@ -1,44 +1,29 @@
-import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:zedge/view/screens/wallpaper_screenview.dart';
 
 class FeatureListView extends StatefulWidget {
   final icon;
-  bool isloading = true;
   final title;
   final image;
-  FeatureListView(
-      {Key? key, this.icon, this.title, this.image, required this.isloading})
-      : super(key: key);
+  FeatureListView({
+    Key? key,
+    this.icon,
+    this.title,
+    this.image,
+  }) : super(key: key);
 
   @override
   _FeatureListViewState createState() => _FeatureListViewState();
 }
 
 class _FeatureListViewState extends State<FeatureListView> {
-   void loaddata()  {
-       setState(() {
-         load = false;
-       });
-    }
-@override
-void initState() { 
-  super.initState();
-  load = true;
-      Future.delayed(
-          Duration(
-            seconds: 3,
-          ),loaddata);  
-}
+
   @override
   Widget build(BuildContext context) {
-  
- 
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 3),
-      child: load
+      child: load! 
           ? Shimmer.fromColors(
               baseColor: Colors.grey,
               highlightColor: Colors.white,
@@ -53,7 +38,6 @@ void initState() {
           : Container(
               width: MediaQuery.of(context).size.width * 0.42,
               decoration: new BoxDecoration(
-                        color: Colors.grey,
                 borderRadius: BorderRadius.circular(10),
                 image: new DecorationImage(
                   image: NetworkImage(widget.image),

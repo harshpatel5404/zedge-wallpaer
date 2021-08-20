@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:zedge/view/api/wall_model.dart';
 import 'package:zedge/view/widgets/popular_view.dart';
 
+import 'wallpaper_screenview.dart';
+
 class VideoScreen extends StatelessWidget {
-  const VideoScreen({Key? key}) : super(key: key);
+  List<ImageResponse>? data;
+   VideoScreen({Key? key, this.data}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -17,7 +21,9 @@ class VideoScreen extends StatelessWidget {
           padding: EdgeInsets.fromLTRB(5, 5, 5, 0),
           child: CustomScrollView(
             slivers: [
-              PopularGridview(isVideo: true),
+              PopularGridview(isVideo: true, links: urls,
+              data: data!,
+              ),
             ],
           ),
         ),

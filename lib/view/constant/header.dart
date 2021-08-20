@@ -13,7 +13,37 @@ class Header extends StatefulWidget {
   _HeaderState createState() => _HeaderState();
 }
 
+
 class _HeaderState extends State<Header> {
+
+// Future<bool> _checkInternet() async{
+//   bool isOnline =false;
+//     try {
+//       final result = await InternetAddress.lookup('example.com');
+//       if (result.isNotEmpty && result[0].rawAddress.isNotEmpty) {
+//         isOnline = true;
+//         return true;
+
+//       } else
+//         isOnline = false;
+//         return false;
+//     } on SocketException catch (_) {
+//       isOnline = false;
+//         return false;
+//     }
+   
+// }
+
+
+
+@override
+void initState() { 
+  super.initState();
+  // SystemChrome.setPreferredOrientations([
+  //   DeviceOrientation.portraitUp,
+  // ]);
+
+}
   var view;
   bool isSearch = false;
   @override
@@ -40,7 +70,7 @@ class _HeaderState extends State<Header> {
                 (BuildContext context, bool innerBoxIsScrolled) {
                   return <Widget>[
                 SliverAppBar(
-                  backgroundColor: Color(0xff241f1f),
+                  backgroundColor: Color(0xff2e2e2e),
                   title: isSearch
                       ? TextField(
                           cursorColor: Colors.white,
@@ -67,10 +97,8 @@ class _HeaderState extends State<Header> {
                           if (isSearch == false) {
                             isSearch = true;
                           } else {
-                            // Navigator.pushNamed(context, '/notifications');
                             isSearch = false;
                           }
-                          // isSearch = !isSearch;
                         });
                       },
                       icon: Icon(

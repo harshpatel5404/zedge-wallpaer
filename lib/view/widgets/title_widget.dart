@@ -28,7 +28,7 @@ loaddata();
     return Padding(
       padding: const EdgeInsets.fromLTRB(10, 15, 0, 7),
 
-      child: load ? Shimmer.fromColors( baseColor: Colors.white, highlightColor: Colors.grey,
+      child: load! ? Shimmer.fromColors( baseColor: Colors.white, highlightColor: Colors.grey,
         child: Text(
           widget.title,
           style: TextStyle(

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:zedge/view/api/wall_model.dart';
+import 'package:zedge/view/screens/wallpaper_screenview.dart';
 import 'package:zedge/view/widgets/feature_view.dart';
 import 'video_screen.dart';
 
@@ -44,18 +45,14 @@ List feturedWallpaper = [
 
 class FeatureList extends StatefulWidget {
   List<ImageResponse>? data;
-  bool isloading;
-  FeatureList({Key? key, this.data, required this.isloading}) : super(key: key);
-
+  FeatureList({Key? key, this.data, }) : super(key: key);
   @override
   _FeatureListState createState() => _FeatureListState();
 }
 
 class _FeatureListState extends State<FeatureList> {
-
   @override
   Widget build(BuildContext context) {
-
     return Row(
       children: [
         Container(
@@ -63,19 +60,24 @@ class _FeatureListState extends State<FeatureList> {
           width: MediaQuery.of(context).size.width,
           child: ListView.builder(
             scrollDirection: Axis.horizontal,
-            itemCount: widget.data!.length,
+            itemCount: 30,
             itemBuilder: (context, index) {
               return InkWell(
                 onTap: () {
                   Navigator.push(context,
-                      MaterialPageRoute(builder: (context) => VideoScreen()));
+                      MaterialPageRoute(builder: (context) => VideoScreen(
+                        data: widget.data!,
+                      )));
                 },
-                child: FeatureListView(
-                  isloading: widget.isloading,
+                child: widget.data != [] || load! != true ? FeatureListView(
                   title: feturedWallpaper[index]["title"],
                   icon: feturedWallpaper[index]["icon"],
                   image: widget.data![index].urls!.small,
-                ),
+                ) : FeatureListView(
+                  title: feturedWallpaper[index]["title"],
+                  icon: feturedWallpaper[index]["icon"],
+                  image: [],
+                ) 
               );
             },
           ),

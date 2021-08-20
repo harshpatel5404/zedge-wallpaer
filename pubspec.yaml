@@ -34,6 +34,7 @@ dependencies:
   dio: ^4.0.0
   http: ^0.13.3
   wallpaper: ^1.0.7
+  connectivity: ^3.0.6
   permission_handler: ^8.1.2
   share: ^2.0.4
   shimmer: ^2.0.0

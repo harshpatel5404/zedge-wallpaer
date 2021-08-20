@@ -7,24 +7,84 @@ import 'package:zedge/view/widgets/popular_view.dart';
 import 'package:zedge/view/widgets/title_widget.dart';
 import 'package:zedge/view/widgets/wallpaper_categories.dart';
 
-class VideoWallpaperTabView extends StatelessWidget {
+List urls = [];
+bool? load;
+
+class VideoWallpaperTabView extends StatefulWidget {
   const VideoWallpaperTabView({Key? key}) : super(key: key);
 
   @override
+  _VideoWallpaperTabViewState createState() => _VideoWallpaperTabViewState();
+}
+
+class _VideoWallpaperTabViewState extends State<VideoWallpaperTabView> {
+   @override
+  void initState() {
+    super.initState();
+    load = true;
+  }
+
+   @override
   Widget build(BuildContext context) {
     return FutureBuilder<List<ImageResponse>>(
-      future: getResponse("nature"),
+      future: getResponse("wallpaper"),
       builder:
           (BuildContext context, AsyncSnapshot<List<ImageResponse>> snapshot) {
-       if (snapshot.data == null ||
+        if (snapshot.data == null ||
             snapshot.connectionState == ConnectionState.waiting) {
-          return Center(child: CircularProgressIndicator());
+          load = true;
+          return TabBarView(
+            children: [
+              CustomScrollView(
+                semanticChildCount: 1,
+                slivers: <Widget>[
+                  SliverToBoxAdapter(
+                      child: HeadingWidget(
+                    title: "Featured",
+                  )),
+                  SliverToBoxAdapter(
+                    child: FeatureList(
+                      data: [],
+                    ),
+                  ),
+                  SliverToBoxAdapter(
+                    child: HeadingWidget(
+                      title: "Popular",
+                    ),
+                  ),
+                  PopularGridview(
+                    data: [],
+                    links: [],
+                    isVideo: false,
+                  )
+                ],
+              ),
+              CustomScrollView(
+                slivers: [
+                  SliverToBoxAdapter(
+                    child: WallpaperCategories(
+                      data: [],
+                    ),
+                  ),
+                  Categoriesgrid(),
+                ],
+              ),
+              CustomScrollView(
+                slivers: [
+                  PopularGridview(
+                    links: [],
+                    data: [],
+                    isVideo: true,
+                  )
+                ],
+              )
+            ],
+          );
         }
         if (snapshot.data != null ||
             snapshot.connectionState == ConnectionState.done) {
           var data = snapshot.data!;
-          List urls = [];
-
+          load = false;
           for (var i = 0; i < data.length; i++) {
             var img = data[i].urls!.small;
             urls.add(img);
@@ -40,7 +100,6 @@ class VideoWallpaperTabView extends StatelessWidget {
                   )),
                   SliverToBoxAdapter(
                     child: FeatureList(
-                      isloading: true,
                       data: data,
                     ),
                   ),
@@ -51,9 +110,9 @@ class VideoWallpaperTabView extends StatelessWidget {
                   ),
                   PopularGridview(
                     data: data,
-                    isVideo: true,
-                    links:urls ,
-                  )
+                    links: urls,
+                    isVideo: false,
+                  ),
                 ],
               ),
               CustomScrollView(
@@ -63,24 +122,22 @@ class VideoWallpaperTabView extends StatelessWidget {
                       data: data,
                     ),
                   ),
-                  Categoriesgrid(
-                  ),
+                  Categoriesgrid(),
                 ],
               ),
               CustomScrollView(
                 slivers: [
                   PopularGridview(
+                    links: urls,
                     data: data,
                     isVideo: true,
-                    links: urls,
                   )
                 ],
               )
             ],
           );
         }
-
-        return Center(child: CircularProgressIndicator());
+        return CircularProgressIndicator();
       },
     );
   }
