@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:zedge/view/screens/wallpaper_screenview.dart';
@@ -18,9 +20,11 @@ class FeatureListView extends StatefulWidget {
 }
 
 class _FeatureListViewState extends State<FeatureListView> {
+  
 
   @override
   Widget build(BuildContext context) {
+    print("image ${widget.image}");
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 3),
       child: load! 

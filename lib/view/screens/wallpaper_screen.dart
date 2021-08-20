@@ -9,7 +9,6 @@ class WallpaperScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Header(
       title: "Wallpapers",
-      
     );
   }
 }

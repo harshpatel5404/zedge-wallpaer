@@ -36,14 +36,7 @@ class _HeaderState extends State<Header> {
 
 
 
-@override
-void initState() { 
-  super.initState();
-  // SystemChrome.setPreferredOrientations([
-  //   DeviceOrientation.portraitUp,
-  // ]);
 
-}
   var view;
   bool isSearch = false;
   @override

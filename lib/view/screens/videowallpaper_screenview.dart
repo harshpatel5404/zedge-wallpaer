@@ -7,8 +7,8 @@ import 'package:zedge/view/widgets/popular_view.dart';
 import 'package:zedge/view/widgets/title_widget.dart';
 import 'package:zedge/view/widgets/wallpaper_categories.dart';
 
-List urls = [];
-bool? load;
+import 'wallpaper_screenview.dart';
+
 
 class VideoWallpaperTabView extends StatefulWidget {
   const VideoWallpaperTabView({Key? key}) : super(key: key);
@@ -17,6 +17,7 @@ class VideoWallpaperTabView extends StatefulWidget {
   _VideoWallpaperTabViewState createState() => _VideoWallpaperTabViewState();
 }
 
+List urls = [];
 class _VideoWallpaperTabViewState extends State<VideoWallpaperTabView> {
    @override
   void initState() {
@@ -24,7 +25,7 @@ class _VideoWallpaperTabViewState extends State<VideoWallpaperTabView> {
     load = true;
   }
 
-   @override
+  @override
   Widget build(BuildContext context) {
     return FutureBuilder<List<ImageResponse>>(
       future: getResponse("wallpaper"),

@@ -12,7 +12,6 @@ Future<List<ImageResponse>> getResponse(String? queries) async {
     queries = "wallaper";
   }
 
-  print(queries);
   try {
     var response = await http.get(Uri.parse(url));
     if (response.statusCode == 200) {
